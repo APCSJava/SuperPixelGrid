@@ -4,13 +4,16 @@ import java.awt.Color;
 import processing.core.PApplet;
 
 public class MainApplication extends PApplet {
-	
+
 	private SuperPixel[][] pixels;
-	private Colorizer c = new Colorizer();
+	private SuperPixel[][] buffer;
+	private SuperPixel[][] previous;
+	private MyColorer c = new MyColorer();
 
 	public static void main(String args[]) {
 		PApplet.main(new String[] { "MainApplication" });
-		// PApplet.main(new String[] {"--present", "MainApplication" });
+		// PApplet.main(new String[] {"--present", "MainApplication"
+		// });
 	}
 
 	public void settings() {
@@ -18,23 +21,26 @@ public class MainApplication extends PApplet {
 	}
 
 	public void setup() {
+		this.surface.setTitle("SuperPixel 1.0");
 		noStroke();
 		pixels = new SuperPixel[32][32];
-		for (int r = 0; r<pixels.length; r++) {
-			for (int c = 0; c<pixels[r].length; c++) {
+		for (int r = 0; r < pixels.length; r++) {
+			for (int c = 0; c < pixels[r].length; c++) {
 				pixels[r][c] = new SuperPixel(Color.BLACK);
 			}
 		}
+		previous = pixels;
+		buffer = pixels;
 	}
 
 	public void draw() {
 		background(64);
-		
-		for (int r = 0; r<pixels.length; r++) {
-			for (int c = 0; c<pixels[r].length; c++) {
+
+		for (int r = 0; r < pixels.length; r++) {
+			for (int c = 0; c < pixels[r].length; c++) {
 				SuperPixel sp = pixels[r][c];
 				fill(sp.getColor().getRGB());
-				ellipse(r*16+8, c*16+8, sp.getSize(), sp.getSize());
+				ellipse(c * 16 + 8, r * 16 + 8, sp.getSize(), sp.getSize());
 			}
 		}
 	}
@@ -42,37 +48,47 @@ public class MainApplication extends PApplet {
 	public void keyPressed() {
 		if (key == CODED) {
 			if (keyCode == UP) {
-				c.processUp(pixels);
+				c.commandUp(pixels);
 			} else if (keyCode == RIGHT) {
-				c.processRight(pixels);
+				c.commandRight(pixels);
 			} else if (keyCode == DOWN) {
-				c.processDown(pixels);
+				c.commandDown(pixels);
 			} else if (keyCode == LEFT) {
-				c.processLeft(pixels);
+				c.commandLeft(pixels);
 			}
 		} else {
 			if (key == 'r' || key == 'R') {
-				pixels = c.processRed(pixels);
+				buffer = c.commandRed(pixels);
 			} else if (key == 'g' || key == 'G') {
-				pixels = c.processGreen(pixels);
+				buffer = c.commandGreen(pixels);
 			} else if (key == 'b' || key == 'B') {
-				pixels = c.processBlue(pixels);
-			} else if (key == 'c' || key == 'C') {
-				pixels = c.processClear(pixels);
+				buffer = c.commandBlue(pixels);
 			} else if (key == 'w' || key == 'W') {
-				pixels = c.processWhite(pixels);
+				buffer = c.commandWhite(pixels);
+			} else if (key == 'c' || key == 'C') {
+				c.commandClear(pixels);
+			} else if (key == 'l' || key == 'L') {
+				previous = pixels;
+				c.lifeCommand(pixels);
+			} else if (key == 'z' || key == 'Z') {
+
+				if (previous != null) {
+					buffer = pixels;
+					pixels = previous;
+					previous = buffer;
+				}
 			} else if (key == ' ') {
-				c.processSpace(pixels);
-				
+				previous = pixels;
+				pixels = buffer;
 			}
 		}
 	}
 
 	public void mousePressed() {
-		int row = (int) (mouseX/16.0);
-		int col = (int) (mouseY/16.0);
+		int row = (int) (mouseY / 16.0);
+		int col = (int) (mouseX / 16.0);
 		SuperPixel sp = pixels[row][col];
-		c.modifySuperPixel(sp);
+		Pixel8.modifySuperPixel(sp);
 
 	}
 
