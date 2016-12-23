@@ -2,6 +2,7 @@
 import java.awt.Color;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class MainApplication extends PApplet {
 
@@ -9,6 +10,8 @@ public class MainApplication extends PApplet {
 	private SuperPixel[][] buffer;
 	private SuperPixel[][] previous;
 	private MyColorer c = new MyColorer();
+	private boolean toolTips = false;
+	int[] mouseCoords = { -1, -1 }; // row and column
 
 	public static void main(String args[]) {
 		PApplet.main(new String[] { "MainApplication" });
@@ -33,15 +36,35 @@ public class MainApplication extends PApplet {
 		buffer = pixels;
 	}
 
-	public void draw() {
-		background(96);
+	public void update() {
+		// calculate which column is under mouse
+		if (mouseX >= 0 && mouseX < width) {
+			mouseCoords[1] = (int) (mouseX / 16.0);
+		} else
+			mouseCoords[1] = -1;
+		if (mouseY >= 0 && mouseY < height) {
+			mouseCoords[0] = (int) (mouseY / 16.0);
+		} else
+			mouseCoords[0] = -1;
+	}
 
+	public void draw() {
+		update();
+		background(96);
 		for (int r = 0; r < pixels.length; r++) {
 			for (int c = 0; c < pixels[r].length; c++) {
 				SuperPixel sp = pixels[r][c];
 				fill(sp.getColor().getRGB());
 				ellipse(c * 16 + 8, r * 16 + 8, sp.getSize(), sp.getSize());
 			}
+		}
+		if (toolTips) {
+			pushStyle();
+			fill(255);
+			int row = mouseCoords[0];
+			int col = mouseCoords[1];
+			text("("+row+","+col+")", mouseX, mouseY);
+			popStyle();
 		}
 	}
 
@@ -81,17 +104,14 @@ public class MainApplication extends PApplet {
 				previous = pixels;
 				pixels = buffer;
 			} else if (key == 't' || key == 'T') {
-				//toggle tooltips
+				toolTips = !toolTips;
 			}
 		}
 	}
 
 	public void mousePressed() {
-		int row = (int) (mouseY / 16.0);
-		int col = (int) (mouseX / 16.0);
-		SuperPixel sp = pixels[row][col];
+		SuperPixel sp = pixels[mouseCoords[0]][mouseCoords[1]];
 		Pixel8.modifySuperPixel(sp);
-
 	}
 
 }
