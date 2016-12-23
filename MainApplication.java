@@ -34,7 +34,7 @@ public class MainApplication extends PApplet {
 	}
 
 	public void draw() {
-		background(64);
+		background(96);
 
 		for (int r = 0; r < pixels.length; r++) {
 			for (int c = 0; c < pixels[r].length; c++) {
@@ -80,6 +80,8 @@ public class MainApplication extends PApplet {
 			} else if (key == ' ') {
 				previous = pixels;
 				pixels = buffer;
+			} else if (key == 't' || key == 'T') {
+				//toggle tooltips
 			}
 		}
 	}

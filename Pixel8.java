@@ -104,8 +104,9 @@ public interface Pixel8 {
 	void commandRight(SuperPixel[][] original);
 
 	/**
-	 * As of Java8, interfaces are able to specify static
-	 * methods. This topic is beyond the scope of the exam.
+	 * As of Java8, interfaces are able to specify static methods.
+	 * While the topic is beyond the scope of the exam, here is an
+	 * example.
 	 * 
 	 * @param thisPixel
 	 */
@@ -114,8 +115,9 @@ public interface Pixel8 {
 	}
 
 	/**
-	 * As of Java8, interfaces are able to specify default
-	 * methods. The topic is beyond the scope of the exam.
+	 * As of Java8, interfaces are able to specify default methods.
+	 * While the topic is beyond the scope of the exam, here is an
+	 * example.
 	 */
 	default void lifeCommand(SuperPixel[][] original) {
 		original = commandWhite(original);
