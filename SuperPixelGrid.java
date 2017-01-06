@@ -1,22 +1,29 @@
 
 import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.JOptionPane;
 
 import processing.core.PApplet;
-import processing.core.PVector;
 
-public class MainApplication extends PApplet {
+/***
+ * Runs the main application. Presents a dialog box to request the
+ * name of a class to use as colorizer. If the requested class does
+ * not exist or cannot be found, a default colorizer is used.
+ * 
+ * @author kentcollins
+ */
+public class SuperPixelGrid extends PApplet {
 
 	private SuperPixel[][] pixels;
 	private SuperPixel[][] buffer;
 	private SuperPixel[][] previous;
-	private MyColorer c = new MyColorer();
+	private Colorizer c;
 	private boolean toolTips = false;
 	int[] mouseCoords = { -1, -1 }; // row and column
 
 	public static void main(String args[]) {
-		PApplet.main(new String[] { "MainApplication" });
-		// PApplet.main(new String[] {"--present", "MainApplication"
-		// });
+		PApplet.main(new String[] { "SuperPixelGrid" });
 	}
 
 	public void settings() {
@@ -24,7 +31,6 @@ public class MainApplication extends PApplet {
 	}
 
 	public void setup() {
-		this.surface.setTitle("SuperPixel 1.0");
 		noStroke();
 		pixels = new SuperPixel[32][32];
 		for (int r = 0; r < pixels.length; r++) {
@@ -34,6 +40,17 @@ public class MainApplication extends PApplet {
 		}
 		previous = pixels;
 		buffer = pixels;
+		String requestedColorerClass = JOptionPane.showInputDialog("Specify a Colorizer: ");
+		try {
+			Class<?> cp = Class.forName(requestedColorerClass);
+			c = (Colorizer) cp.getConstructor().newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			requestedColorerClass = "using default colorizer";
+			c = new DefaultColorer();
+		}
+		this.surface.setTitle("SuperPixel 1.0 -- "+requestedColorerClass);
+
 	}
 
 	public void update() {
@@ -63,7 +80,7 @@ public class MainApplication extends PApplet {
 			fill(255);
 			int row = mouseCoords[0];
 			int col = mouseCoords[1];
-			text("("+row+","+col+")", mouseX, mouseY);
+			text("(" + row + "," + col + ")", mouseX, mouseY);
 			popStyle();
 		}
 	}
@@ -101,8 +118,10 @@ public class MainApplication extends PApplet {
 					previous = buffer;
 				}
 			} else if (key == ' ') {
-				previous = pixels;
-				pixels = buffer;
+				if (buffer != null) {
+					previous = pixels;
+					pixels = buffer;
+				}
 			} else if (key == 't' || key == 'T') {
 				toolTips = !toolTips;
 			}
@@ -111,7 +130,7 @@ public class MainApplication extends PApplet {
 
 	public void mousePressed() {
 		SuperPixel sp = pixels[mouseCoords[0]][mouseCoords[1]];
-		Pixel8.modifySuperPixel(sp);
+		Colorizer.modifySuperPixel(sp);
 	}
 
 }

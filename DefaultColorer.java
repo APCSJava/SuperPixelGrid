@@ -1,6 +1,19 @@
 import java.awt.Color;
 
-public class MyColorer implements Pixel8 {
+/***
+ * Provides a sample implementation of the Colorizer interface. The
+ * following commands are implemented intelligently:
+ * 
+ * <pre>
+ * 'r' or 'R' -- returns a grid where each superpixel is set to red
+ * 'w' or 'W' -- returns a grid where existing superpixels may be replaced by white
+ * LEFT -- immediately modifies the grid by shifting each superpixel one column left
+ * </pre>
+ * 
+ * @author kentcollins
+ *
+ */
+public class DefaultColorer implements Colorizer {
 
 	@Override
 	public SuperPixel[][] commandRed(SuperPixel[][] original) {
@@ -13,13 +26,17 @@ public class MyColorer implements Pixel8 {
 		return mod;
 	}
 
-	@Override
+	/**
+	 * A broken implementation that needs to be corrected
+	 */
 	public SuperPixel[][] commandGreen(SuperPixel[][] original) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	/**
+	 * A broken implementation that needs to be corrected
+	 */
 	public SuperPixel[][] commandBlue(SuperPixel[][] original) {
 		// TODO Auto-generated method stub
 		return null;
@@ -37,18 +54,24 @@ public class MyColorer implements Pixel8 {
 		return mod;
 	}
 
-	@Override
+	/**
+	 * A broken implementation that needs to be corrected
+	 */
 	public void commandClear(SuperPixel[][] original) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
+	/**
+	 * A broken implementation that needs to be corrected
+	 */
 	public void commandUp(SuperPixel[][] original) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * A broken implementation that needs to be corrected
+	 */
 	public void commandDown(SuperPixel[][] original) {
 		// TODO Auto-generated method stub
 
@@ -68,15 +91,12 @@ public class MyColorer implements Pixel8 {
 
 	}
 
-	@Override
+	/**
+	 * A broken implementation that needs to be corrected
+	 */
 	public void commandRight(SuperPixel[][] original) {
 		// TODO Auto-generated method stub
 
-	}
-	
-	@Override
-	public void lifeCommand(SuperPixel[][] arg) {
-		commandLeft(arg);
 	}
 
 }
