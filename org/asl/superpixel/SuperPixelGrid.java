@@ -24,7 +24,7 @@ public class SuperPixelGrid extends PApplet {
 	int[] mouseCoords = { -1, -1 }; // row and column
 
 	public static void main(String args[]) {
-		PApplet.main(new String[] { "SuperPixelGrid" });
+		PApplet.main(new String[] { "org.asl.superpixel.SuperPixelGrid" });
 	}
 
 	public void settings() {
