@@ -1,3 +1,4 @@
+package org.asl.superpixel;
 import java.awt.Color;
 
 /***
