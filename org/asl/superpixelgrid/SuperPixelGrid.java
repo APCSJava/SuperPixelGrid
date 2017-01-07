@@ -1,4 +1,4 @@
-package org.asl.superpixel;
+package org.asl.superpixelgrid;
 
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +24,7 @@ public class SuperPixelGrid extends PApplet {
 	int[] mouseCoords = { -1, -1 }; // row and column
 
 	public static void main(String args[]) {
-		PApplet.main(new String[] { "org.asl.superpixel.SuperPixelGrid" });
+		PApplet.main(new String[] { "org.asl.superpixelgrid.SuperPixelGrid" });
 	}
 
 	public void settings() {
