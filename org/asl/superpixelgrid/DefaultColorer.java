@@ -74,7 +74,6 @@ public class DefaultColorer implements Colorizer {
 	 * A broken implementation that needs to be corrected
 	 */
 	public void commandDown(SuperPixel[][] original) {
-		System.out.println("What is programming?");
 		// TODO Auto-generated method stub
 
 	}
