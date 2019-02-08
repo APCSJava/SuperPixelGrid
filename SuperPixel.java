@@ -1,4 +1,4 @@
-package org.asl.superpixelgrid;
+
 import java.awt.Color;
 
 /***
