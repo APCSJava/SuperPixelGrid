@@ -9,7 +9,7 @@ import java.awt.Color;
  * @author kentcollins
  */
 public class SuperPixelGrid {
-	
+
 	private final int SCREEN_WIDTH = 512;
 	private final int SCREEN_HEIGHT = 512;
 
@@ -41,21 +41,25 @@ public class SuperPixelGrid {
 		StdDraw.setXscale(0, SCREEN_WIDTH);
 		StdDraw.setYscale(0, SCREEN_HEIGHT);
 		StdDraw.enableDoubleBuffering();
-		while(true) {
+		while (true) {
 			checkMouse();
 			checkKeys();
 			draw();
 		}
 	}
-	
+
 	private void checkKeys() {
-		
+		while (StdDraw.hasNextKeyTyped()) {
+			char k = StdDraw.nextKeyTyped();
+			keyPressed(k);
+			StdOut.println(k);
+		}
 	}
 
 	private void checkMouse() {
 		double mouseX = StdDraw.mouseX();
 		double mouseY = StdDraw.mouseY();
-		
+
 		// calculate which column is under mouse
 		if (mouseX >= 0 && mouseX < SCREEN_WIDTH) {
 			mouseCoords[1] = (int) (mouseX / 16.0);
@@ -73,61 +77,78 @@ public class SuperPixelGrid {
 			for (int c = 0; c < pixels[r].length; c++) {
 				SuperPixel sp = pixels[r][c];
 				StdDraw.setPenColor(sp.getColor());
-				StdDraw.circle(c * 16 + 8, r * 16 + 8, sp.getSize());
+				StdDraw.filledCircle(c * 16 + 8, r * 16 + 8, sp.getSize());
 			}
 		}
-//		if (toolTips) {
-//			pushStyle();
-//			fill(255);
-//			int row = mouseCoords[0];
-//			int col = mouseCoords[1];
-//			text("(" + row + "," + col + ")", mouseX, mouseY);
-//			popStyle();
-//		}
+		if (toolTips) {
+			StdDraw.setPenColor(java.awt.Color.WHITE);
+			int row = mouseCoords[0];
+			int col = mouseCoords[1];
+			StdDraw.text(256, 256, "(" + row + "," + col + ")");
+		}
+		StdDraw.show();
 	}
 
-//	private void keyPressed() {
-//		if (key == CODED) {
-//			if (keyCode == UP) {
-//				c.commandUp(pixels);
-//			} else if (keyCode == RIGHT) {
-//				c.commandRight(pixels);
-//			} else if (keyCode == DOWN) {
-//				c.commandDown(pixels);
-//			} else if (keyCode == LEFT) {
-//				c.commandLeft(pixels);
-//			}
-//		} else {
-//			if (key == 'r' || key == 'R') {
-//				buffer = c.commandRed(pixels);
-//			} else if (key == 'g' || key == 'G') {
-//				buffer = c.commandGreen(pixels);
-//			} else if (key == 'b' || key == 'B') {
-//				buffer = c.commandBlue(pixels);
-//			} else if (key == 'w' || key == 'W') {
-//				buffer = c.commandWhite(pixels);
-//			} else if (key == 'c' || key == 'C') {
-//				c.commandClear(pixels);
-//			} else if (key == 'l' || key == 'L') {
-//				previous = pixels;
-//				c.lifeCommand(pixels);
-//			} else if (key == 'z' || key == 'Z') {
-//
-//				if (previous != null) {
-//					buffer = pixels;
-//					pixels = previous;
-//					previous = buffer;
-//				}
-//			} else if (key == ' ') {
-//				if (buffer != null) {
-//					previous = pixels;
-//					pixels = buffer;
-//				}
-//			} else if (key == 't' || key == 'T') {
-//				toolTips = !toolTips;
-//			}
-//		}
-//	}
+	private void keyPressed(char key) {
+		switch (key) {
+		case 'w': case 'W':
+			c.commandUp(pixels);
+			break;
+		case 'a': case 'A':
+			c.commandLeft(pixels);
+			break;
+		case 's': case 'S':
+			c.commandDown(pixels);
+			break;
+		case 'd': case 'D':
+			c.commandRight(pixels);
+			break;
+		case 'r':
+		case 'R':
+			buffer = c.commandRed(pixels);
+			break;
+		case 'g':
+		case 'G':
+			buffer = c.commandGreen(pixels);
+			break;
+		case 'b':
+		case 'B':
+			buffer = c.commandBlue(pixels);
+			break;
+		case 'x':
+		case 'X':
+			buffer = c.commandWhite(pixels);
+			break;
+		case 'c':
+		case 'C':
+			c.commandClear(pixels);
+			break;
+		case 'l':
+		case 'L':
+			previous = pixels;
+			c.lifeCommand(pixels);
+			break;
+		case 'z':
+		case 'Z':
+			if (previous != null) {
+				buffer = pixels;
+				pixels = previous;
+				previous = buffer;
+			}
+			break;
+		case ' ':
+			if (buffer != null) {
+				previous = pixels;
+				pixels = buffer;
+			}
+			break;
+		case 't':
+		case 'T':
+			StdOut.println(toolTips);
+			toolTips = !toolTips;
+			break;
+		}
+	}
 
 	private void mousePressed() {
 		SuperPixel sp = pixels[mouseCoords[0]][mouseCoords[1]];

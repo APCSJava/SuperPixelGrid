@@ -20,14 +20,14 @@ public class SuperPixel {
 
 	/**
 	 * Create a superpixel by specifying its color. A default size of
-	 * 15 is assigned.
+	 * 7 is assigned.
 	 * 
 	 * @param color
 	 *            java.awt.Color to be assigned
 	 */
 	public SuperPixel(Color color) {
 		this.color = color;
-		this.size = 15;
+		this.size = 7;
 	}
 
 	/**
