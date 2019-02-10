@@ -1,5 +1,6 @@
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 
 /***
  * Runs the main application. Presents a dialog box to request the name of a
@@ -45,14 +46,47 @@ public class SuperPixelGrid {
 			checkMouse();
 			checkKeys();
 			draw();
+			StdDraw.pause(100);
 		}
 	}
 
 	private void checkKeys() {
-		while (StdDraw.hasNextKeyTyped()) {
-			char k = StdDraw.nextKeyTyped();
-			keyPressed(k);
-			StdOut.println(k);
+		if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
+			c.commandUp(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
+			c.commandLeft(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
+			c.commandDown(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
+			c.commandRight(pixels);
+		}else if (StdDraw.isKeyPressed(KeyEvent.VK_R)) {
+			buffer = c.commandRed(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_G)) {
+			buffer = c.commandGreen(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_B)) {
+			buffer = c.commandBlue(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_W)) {
+			buffer = c.commandWhite(pixels);
+		}else if (StdDraw.isKeyPressed(KeyEvent.VK_C)) {
+			c.commandClear(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_L)) {
+			previous = pixels;
+			c.lifeCommand(pixels);
+		}	else if (StdDraw.isKeyPressed(KeyEvent.VK_Z)) {
+			if (previous != null) {
+				buffer = pixels;
+				pixels = previous;
+				previous = buffer;
+			}
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
+			if (buffer != null) {
+				previous = pixels;
+				pixels = buffer;
+			}
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
+			StdOut.println(toolTips);
+			toolTips = !toolTips;
+			
 		}
 	}
 
@@ -82,72 +116,11 @@ public class SuperPixelGrid {
 		}
 		if (toolTips) {
 			StdDraw.setPenColor(java.awt.Color.WHITE);
-			int row = mouseCoords[0];
-			int col = mouseCoords[1];
-			StdDraw.text(256, 256, "(" + row + "," + col + ")");
+			int row = 31 -mouseCoords[0]; // display upper left corner as (0, 0)
+			int col = mouseCoords[1]; 
+			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "(" + row + "," + col + ")");
 		}
 		StdDraw.show();
-	}
-
-	private void keyPressed(char key) {
-		switch (key) {
-		case 'w': case 'W':
-			c.commandUp(pixels);
-			break;
-		case 'a': case 'A':
-			c.commandLeft(pixels);
-			break;
-		case 's': case 'S':
-			c.commandDown(pixels);
-			break;
-		case 'd': case 'D':
-			c.commandRight(pixels);
-			break;
-		case 'r':
-		case 'R':
-			buffer = c.commandRed(pixels);
-			break;
-		case 'g':
-		case 'G':
-			buffer = c.commandGreen(pixels);
-			break;
-		case 'b':
-		case 'B':
-			buffer = c.commandBlue(pixels);
-			break;
-		case 'x':
-		case 'X':
-			buffer = c.commandWhite(pixels);
-			break;
-		case 'c':
-		case 'C':
-			c.commandClear(pixels);
-			break;
-		case 'l':
-		case 'L':
-			previous = pixels;
-			c.lifeCommand(pixels);
-			break;
-		case 'z':
-		case 'Z':
-			if (previous != null) {
-				buffer = pixels;
-				pixels = previous;
-				previous = buffer;
-			}
-			break;
-		case ' ':
-			if (buffer != null) {
-				previous = pixels;
-				pixels = buffer;
-			}
-			break;
-		case 't':
-		case 'T':
-			StdOut.println(toolTips);
-			toolTips = !toolTips;
-			break;
-		}
 	}
 
 	private void mousePressed() {
