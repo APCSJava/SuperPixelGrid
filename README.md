@@ -1,6 +1,6 @@
 # SuperPixelGrid
-Processing driven lab for exploring 2D arrays.  Requires Java 8 and Processing's core.jar library on the build path to compile.
+Lab for exploring 2D arrays.  Comes with an executable jar (verified under Java 8) to illustrate how the finished tool is intended to function.
 
-An executable (runnable) JAR is provided to give users a sense of the desired outcome.  When the application starts, it asks for the name of a class that implements the Colorizer interface -- if no value is given or if the stated class cannot be found, the DefaultColorer class is used.  Once students have written their own Colorizer class (either by implementing Colorizer or by extending DefaultColorer) they should supply that class name at the prompt.
+Version 2 requires Princeton University's Standard Libraries (Robert Sedgewick and Kevin Wayne).  A single jar file, stdlib.jar, may be downloaded from https://introcs.cs.princeton.edu/java/stdlib/ and placed on the classpath.  More information is available on the link.
 
 Documentation (API) is available at https://apcsjava.github.io/SuperPixelGrid/
