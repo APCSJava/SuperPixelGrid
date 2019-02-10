@@ -88,6 +88,8 @@ public class SuperPixelGrid {
 			while (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
 				// wait for key release
 			}
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_Q)) {
+			System.exit(0);
 		}
 	}
 
