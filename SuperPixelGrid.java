@@ -3,21 +3,20 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 /***
- * Runs the main application. Presents a dialog box to request the name of a
- * class to use as colorizer. If the requested class does not exist or cannot be
- * found, a default colorizer is used.
+ * Runs the main application.
  * 
  * @author kentcollins
+ * @version 2.0 adapted from Processing to stdlib.jar
  */
 public class SuperPixelGrid {
 
 	private final int SCREEN_WIDTH = 512;
 	private final int SCREEN_HEIGHT = 512;
 
+	private Colorizer c;
 	private SuperPixel[][] pixels;
 	private SuperPixel[][] buffer;
-	private SuperPixel[][] previous;
-	private Colorizer c;
+	private SuperPixel[][] previous;  // used for undo action
 	private boolean toolTips = false;
 	int[] mouseCoords = { -1, -1 }; // row and column
 
@@ -59,20 +58,20 @@ public class SuperPixelGrid {
 			c.commandDown(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
 			c.commandRight(pixels);
-		}else if (StdDraw.isKeyPressed(KeyEvent.VK_R)) {
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_W)) {
+			buffer = c.commandWhite(pixels);
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_R)) {
 			buffer = c.commandRed(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_G)) {
 			buffer = c.commandGreen(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_B)) {
 			buffer = c.commandBlue(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_W)) {
-			buffer = c.commandWhite(pixels);
-		}else if (StdDraw.isKeyPressed(KeyEvent.VK_C)) {
+		}  else if (StdDraw.isKeyPressed(KeyEvent.VK_C)) {
 			c.commandClear(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_L)) {
 			previous = pixels;
 			c.lifeCommand(pixels);
-		}	else if (StdDraw.isKeyPressed(KeyEvent.VK_Z)) {
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_Z)) {
 			if (previous != null) {
 				buffer = pixels;
 				pixels = previous;
@@ -86,7 +85,9 @@ public class SuperPixelGrid {
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
 			StdOut.println(toolTips);
 			toolTips = !toolTips;
-			
+			while (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
+				// wait for key release
+			}
 		}
 	}
 
@@ -103,6 +104,15 @@ public class SuperPixelGrid {
 			mouseCoords[0] = (int) (mouseY / 16.0);
 		} else
 			mouseCoords[0] = -1;
+
+		// deal with mouse presses
+		if (StdDraw.isMousePressed()) {
+			SuperPixel sp = pixels[mouseCoords[0]][mouseCoords[1]];
+			Colorizer.modifySinglePixel(sp);
+			while (StdDraw.isMousePressed()) {
+				// wait for mouse release
+			}
+		}
 	}
 
 	private void draw() {
@@ -111,21 +121,18 @@ public class SuperPixelGrid {
 			for (int c = 0; c < pixels[r].length; c++) {
 				SuperPixel sp = pixels[r][c];
 				StdDraw.setPenColor(sp.getColor());
-				StdDraw.filledCircle(c * 16 + 8, r * 16 + 8, sp.getSize());
+				StdDraw.filledCircle(c * 16 + 8, r * 16 + 8,
+						sp.getSize());
 			}
 		}
 		if (toolTips) {
 			StdDraw.setPenColor(java.awt.Color.WHITE);
-			int row = 31 -mouseCoords[0]; // display upper left corner as (0, 0)
-			int col = mouseCoords[1]; 
-			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "(" + row + "," + col + ")");
+			int row = 31 - mouseCoords[0]; // display upper left corner as (0, 0)
+			int col = mouseCoords[1];
+			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(),
+					"(" + row + "," + col + ")");
 		}
 		StdDraw.show();
-	}
-
-	private void mousePressed() {
-		SuperPixel sp = pixels[mouseCoords[0]][mouseCoords[1]];
-		Colorizer.modifySuperPixel(sp);
 	}
 
 }

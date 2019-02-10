@@ -1,16 +1,39 @@
 /***
- * Provides practice working with 2D arrays of objects (SuperPixels)
+ * Provides practice working with 2D arrays of SuperPixel objects
  *
  */
 public class Colorizer {
 
 	/**
-	 * Produces an array having the same dimensions as the original but with all
+	 * Produces a new array colored as the original but with a 50% probability that
+	 * any given pixel will be changed to white.
+	 * 
+	 * Postcondition -- all superpixels in the original remain unchanged
+	 * 
+	 * @param original
+	 *            a superpixel array that should not be altered
+	 * @return a new array with the properties described
+	 */
+	SuperPixel[][] commandWhite(SuperPixel[][] original) {
+		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
+		for (int r = 0; r < mod.length; r++) {
+			for (int c = 0; c < mod[r].length; c++) {
+				if (Math.random() > 0.5) {
+					mod[r][c] = new SuperPixel(java.awt.Color.WHITE);
+				} else {
+					mod[r][c] = new SuperPixel(
+							original[r][c].getColor());
+				}
+			}
+		}
+		return mod;
+	}
+
+	/**
+	 * Produces an array of the same dimensions as the original but with all
 	 * superpixels colored red (java.awt.Color.RED).
 	 * 
-	 * The returned array will be held in a buffer until loaded by pressing the
-	 * SPACE bar. The original array should not be modified -- i.e. the picture on
-	 * the screen should not change until the SPACE key is pressed.
+	 * Postcondition -- all superpixels in the original remain unchanged
 	 * 
 	 * @param original
 	 *            a superpixel array that should not be altered
@@ -30,9 +53,7 @@ public class Colorizer {
 	 * Produce an array of the same dimensions as the original having every other
 	 * column colored green.
 	 * 
-	 * The returned array will be held in a buffer until loaded by pressing the
-	 * SPACE bar. The original array should not be modified -- i.e. the picture on
-	 * the screen should not change until the SPACE key is pressed.
+	 * Postcondition -- all superpixels in the original remain unchanged
 	 * 
 	 * @param original
 	 *            a superpixel array that should not be altered
@@ -48,8 +69,7 @@ public class Colorizer {
 	 * row colored blue. The returned array will be held in a buffer until loaded by
 	 * pressing the SPACE bar.
 	 * 
-	 * The original array should not be modified -- i.e. the picture on the screen
-	 * should not change until the SPACE key is pressed.
+	 * Postcondition -- all superpixels in the original remain unchanged
 	 * 
 	 * @param original
 	 *            a superpixel array that should not be altered
@@ -58,29 +78,6 @@ public class Colorizer {
 	SuperPixel[][] commandBlue(SuperPixel[][] original) {
 		// TODO implement this method
 		return null;
-	}
-
-	/**
-	 * Produce an array of the same dimensions as the original but each superpixel
-	 * has a 50% probability of turning white.
-	 * 
-	 * The returned array will be held in a buffer until loaded by pressing the
-	 * SPACE bar. The original array should not be modified -- i.e. the picture on
-	 * the screen should not change until the SPACE key is pressed.
-	 * 
-	 * @param original
-	 *            a superpixel array that should not be altered
-	 * @return a new array with the properties described
-	 */
-	SuperPixel[][] commandWhite(SuperPixel[][] original) {
-		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
-		for (int r = 0; r < mod.length; r++) {
-			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = Math.random() > 0.5 ? new SuperPixel(java.awt.Color.WHITE)
-						: new SuperPixel(original[r][c].getColor());
-			}
-		}
-		return mod;
 	}
 
 	/**
@@ -129,7 +126,8 @@ public class Colorizer {
 		for (int r = 0; r < original.length; r++) {
 			for (int c = 0; c < original[0].length; c++) {
 				if (c == original[0].length - 1) {
-					original[r][c] = new SuperPixel(java.awt.Color.BLACK);
+					original[r][c] = new SuperPixel(
+							java.awt.Color.BLACK);
 				} else {
 					original[r][c] = original[r][c + 1];
 				}
@@ -152,11 +150,11 @@ public class Colorizer {
 	/**
 	 * Sets the color property of the parameter to white.
 	 * 
-	 * @param thisPixel
+	 * @param superPixel
 	 *            a single superpixel to mutate
 	 */
-	public static void modifySuperPixel(SuperPixel thisPixel) {
-		thisPixel.setColor(java.awt.Color.WHITE);
+	public static void modifySinglePixel(SuperPixel superPixel) {
+		superPixel.setColor(java.awt.Color.WHITE);
 	}
 
 	/**
