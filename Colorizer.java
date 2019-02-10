@@ -108,7 +108,7 @@ public class Colorizer {
 	 */
 	void commandUp(SuperPixel[][] original) {
 		for (int r = 0; r < original.length - 1; r++) {
-			original[r] = original[r+1];
+			original[r] = original[r + 1];
 		}
 		for (int c = 0; c < original[0].length; c++) {
 			original[original.length - 1][c] = new SuperPixel(java.awt.Color.BLACK);
@@ -122,7 +122,11 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	void commandDown(SuperPixel[][] original) {
-		// TODO implement this method
+		SuperPixel[] bottom = original[original.length - 1];
+		for (int row = original.length - 1; row > 0; row--) {
+			original[row] = original[row - 1];
+		}
+		original[0] = bottom;
 	}
 
 	/**
@@ -152,7 +156,19 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	void commandRight(SuperPixel[][] original) {
-		// TODO implement this method
+		SuperPixel[] right = new SuperPixel[original.length];
+		// buffer the rightmost column
+		for (int r = 0; r < original.length; r++) {
+			right[r] = original[r][original[r].length - 1];
+		}
+		for (int r = 0; r < original.length; r++) {
+			for (int c = original[r].length-1; c >0; c--) {
+				original[r][c] = original[r][c-1];
+			}
+		}
+		for (int r = 0; r<original.length; r++) {
+			original[r][0] = right[r];
+		}
 	}
 
 	/**
