@@ -1,7 +1,10 @@
+
 /***
  * Provides practice working with 2D arrays of SuperPixel objects
  *
  */
+import java.awt.Color;
+
 public class Colorizer {
 
 	/**
@@ -18,7 +21,7 @@ public class Colorizer {
 		for (int r = 0; r < mod.length; r++) {
 			for (int c = 0; c < mod[r].length; c++) {
 				if (Math.random() > 0.5) {
-					mod[r][c] = new SuperPixel(java.awt.Color.WHITE);
+					mod[r][c] = new SuperPixel(Color.WHITE);
 				} else {
 					mod[r][c] = new SuperPixel(original[r][c].getColor());
 				}
@@ -40,7 +43,7 @@ public class Colorizer {
 		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
 		for (int r = 0; r < mod.length; r++) {
 			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = new SuperPixel(java.awt.Color.RED);
+				mod[r][c] = new SuperPixel(Color.RED);
 			}
 		}
 		return mod;
@@ -59,7 +62,7 @@ public class Colorizer {
 		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
 		for (int r = 0; r < mod.length; r++) {
 			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = c % 2 == 0 ? new SuperPixel(java.awt.Color.GREEN) : original[r][c];
+				mod[r][c] = c % 2 == 0 ? new SuperPixel(Color.GREEN) : original[r][c];
 			}
 		}
 		return mod;
@@ -79,7 +82,7 @@ public class Colorizer {
 		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
 		for (int r = 0; r < mod.length; r++) {
 			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = r % 3 == 0 ? new SuperPixel(java.awt.Color.BLUE) : original[r][c];
+				mod[r][c] = r % 3 == 0 ? new SuperPixel(Color.BLUE) : original[r][c];
 			}
 		}
 		return mod;
@@ -94,7 +97,7 @@ public class Colorizer {
 	void commandClear(SuperPixel[][] original) {
 		for (int r = 0; r < original.length; r++) {
 			for (int c = 0; c < original[r].length; c++) {
-				original[r][c] = new SuperPixel(java.awt.Color.BLACK);
+				original[r][c] = new SuperPixel(Color.BLACK);
 			}
 		}
 	}
@@ -111,7 +114,7 @@ public class Colorizer {
 			original[r] = original[r + 1];
 		}
 		for (int c = 0; c < original[0].length; c++) {
-			original[original.length - 1][c] = new SuperPixel(java.awt.Color.BLACK);
+			original[original.length - 1][c] = new SuperPixel(Color.BLACK);
 		}
 	}
 
@@ -140,7 +143,7 @@ public class Colorizer {
 		for (int r = 0; r < original.length; r++) {
 			for (int c = 0; c < original[0].length; c++) {
 				if (c == original[0].length - 1) {
-					original[r][c] = new SuperPixel(java.awt.Color.BLACK);
+					original[r][c] = new SuperPixel(Color.BLACK);
 				} else {
 					original[r][c] = original[r][c + 1];
 				}
@@ -162,11 +165,11 @@ public class Colorizer {
 			right[r] = original[r][original[r].length - 1];
 		}
 		for (int r = 0; r < original.length; r++) {
-			for (int c = original[r].length-1; c >0; c--) {
-				original[r][c] = original[r][c-1];
+			for (int c = original[r].length - 1; c > 0; c--) {
+				original[r][c] = original[r][c - 1];
 			}
 		}
-		for (int r = 0; r<original.length; r++) {
+		for (int r = 0; r < original.length; r++) {
 			original[r][0] = right[r];
 		}
 	}
@@ -177,7 +180,7 @@ public class Colorizer {
 	 * @param superPixel a single superpixel to mutate
 	 */
 	public static void modifySinglePixel(SuperPixel superPixel) {
-		superPixel.setColor(java.awt.Color.WHITE);
+		superPixel.setColor(Color.WHITE);
 	}
 
 	/**
@@ -187,8 +190,49 @@ public class Colorizer {
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
-	public void lifeCommand(SuperPixel[][] original) {
-		// TODO implement this method
+	public SuperPixel[][] lifeCommand(SuperPixel[][] original) {
+		SuperPixel[][] next = new SuperPixel[original.length][original[0].length];
+		for (int r = 0; r < original.length; r++) {
+			for (int c = 0; c < original[r].length; c++) {
+				SuperPixel sp = original[r][c];
+				int count = countLivingNeighbors(r, c, original);
+				if (sp.getColor().equals(Color.BLACK)) { // dead cell spawns new cell
+					next[r][c] = count == 3 ? new SuperPixel(Color.WHITE) : sp;
+				} else { // living cell dies
+					next[r][c] = count < 2 || count > 3 ? new SuperPixel(Color.BLACK) : sp;
+				}
+			}
+		}
+		return next;
+	}
+
+	private int countLivingNeighbors(int r, int c, SuperPixel[][] grid) {
+		int count = 0;
+		try {
+			if (!grid[r-1][c-1].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r-1][c].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r-1][c+1].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r][c-1].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r][c+1].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r+1][c-1].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r+1][c].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		try {
+			if (!grid[r+1][c+1].getColor().equals(Color.BLACK)) count++;
+		} catch (ArrayIndexOutOfBoundsException e) {}
+		return count;
 	}
 
 }

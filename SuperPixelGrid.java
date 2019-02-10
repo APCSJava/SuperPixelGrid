@@ -17,7 +17,7 @@ public class SuperPixelGrid {
 	private Colorizer c;
 	private SuperPixel[][] pixels;
 	private SuperPixel[][] buffer;
-	private SuperPixel[][] previous;  // used for undo action
+	private SuperPixel[][] previous; // used for undo action
 	private boolean toolTips = false;
 	int[] cellCoords = { -1, -1 }; // row and column from upper left
 
@@ -27,7 +27,7 @@ public class SuperPixelGrid {
 	}
 
 	public SuperPixelGrid() {
-		pixels = new SuperPixel[SCREEN_WIDTH/CELL_SIZE][SCREEN_HEIGHT/CELL_SIZE];
+		pixels = new SuperPixel[SCREEN_WIDTH / CELL_SIZE][SCREEN_HEIGHT / CELL_SIZE];
 		for (int r = 0; r < pixels.length; r++) {
 			for (int c = 0; c < pixels[r].length; c++) {
 				pixels[r][c] = new SuperPixel(Color.BLACK);
@@ -51,6 +51,7 @@ public class SuperPixelGrid {
 	}
 
 	private void checkKeys() {
+		System.out.println("Checking keys "+System.currentTimeMillis());
 		if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
 			c.commandUp(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
@@ -67,17 +68,17 @@ public class SuperPixelGrid {
 			buffer = c.commandGreen(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_B)) {
 			buffer = c.commandBlue(pixels);
-		}  else if (StdDraw.isKeyPressed(KeyEvent.VK_C)) {
+		} else if (StdDraw.isKeyPressed(KeyEvent.VK_C)) {
 			c.commandClear(pixels);
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_L)) {
 			previous = pixels;
-			c.lifeCommand(pixels);
+			buffer = c.lifeCommand(pixels);
+			pixels = buffer;
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_Z)) {
 			if (previous != null) {
 				buffer = pixels;
 				pixels = previous;
 				previous = buffer;
-				StdDraw.pause(100);
 			}
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
 			if (buffer != null) {
@@ -88,7 +89,7 @@ public class SuperPixelGrid {
 			StdOut.println(toolTips);
 			toolTips = !toolTips;
 			while (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
-				// wait for key release
+				StdDraw.pause(150);
 			}
 		} else if (StdDraw.isKeyPressed(KeyEvent.VK_Q)) {
 			System.exit(0);
@@ -97,16 +98,16 @@ public class SuperPixelGrid {
 
 	private void checkMouse() {
 		double mouseX = StdDraw.mouseX();
-		double mouseY = SCREEN_HEIGHT-StdDraw.mouseY();
-		int mouseRow = (int) (mouseY/CELL_SIZE);
-		int mouseCol = (int) (mouseX/CELL_SIZE);
-		cellCoords = new int[] {mouseRow, mouseCol};
+		double mouseY = SCREEN_HEIGHT - StdDraw.mouseY();
+		int mouseRow = (int) (mouseY / CELL_SIZE);
+		int mouseCol = (int) (mouseX / CELL_SIZE);
+		cellCoords = new int[] { mouseRow, mouseCol };
 		// deal with mouse presses
 		if (StdDraw.isMousePressed()) {
 			SuperPixel sp = pixels[mouseRow][mouseCol];
 			Colorizer.modifySinglePixel(sp);
 			while (StdDraw.isMousePressed()) {
-				// wait for mouse release
+				StdDraw.pause(50);
 			}
 		}
 	}
@@ -117,16 +118,14 @@ public class SuperPixelGrid {
 			for (int c = 0; c < pixels[r].length; c++) {
 				SuperPixel sp = pixels[r][c];
 				StdDraw.setPenColor(sp.getColor());
-				StdDraw.filledCircle(c * 16 + 8, SCREEN_HEIGHT- (r * 16) - 8,
-						sp.getSize());
+				StdDraw.filledCircle(c * 16 + 8, SCREEN_HEIGHT - (r * 16) - 8, sp.getSize());
 			}
 		}
 		if (toolTips) {
 			StdDraw.setPenColor(java.awt.Color.WHITE);
 			int row = cellCoords[0]; // display upper left corner as (0, 0)
 			int col = cellCoords[1];
-			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(),
-					"(" + row + "," + col + ")");
+			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "(" + row + "," + col + ")");
 		}
 		StdDraw.show();
 	}
