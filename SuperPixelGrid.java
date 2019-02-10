@@ -117,7 +117,7 @@ public class SuperPixelGrid {
          for (int c = 0; c < pixels[r].length; c++) {
             SuperPixel sp = pixels[r][c];
             StdDraw.setPenColor(sp.getColor());
-            StdDraw.filledCircle(c * 16 + 8, SCREEN_HEIGHT - (r * 16) - 8, sp.getSize());
+            StdDraw.filledCircle(c * CELL_SIZE + CELL_SIZE/2, SCREEN_HEIGHT - (r * CELL_SIZE) - CELL_SIZE/2, sp.getSize());
          }
       }
       if (toolTips) {
