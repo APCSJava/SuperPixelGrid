@@ -5,11 +5,11 @@ Version 2 requires Princeton University's Standard Libraries (Robert Sedgewick a
 
 Documentation (API) is available at https://apcsjava.github.io/SuperPixelGrid/
 
-NOTE FOR MacOS - Recent versions of MacOS respond to an extended key press by bringing up a context menu for selection of special accent characters rather than the traditional implementation that sends repeated keypress signals.  Short key presses are therefore unaffected but longer key holds will render the key listener useless.  To disable the character accent menu and enable auto-repeat, type the following at the command prompt:
+NOTE: MacOS - Recent versions of MacOS respond to an extended key press (ie. key held down) by bringing up a context menu for selection of special accent characters rather than sending a series of repeated keypress signals.  While short key presses are  unaffected, sustained key presses will behave erratically.  To avoid this outcome, disable the character accent menu and enable auto-repeat by entering the following at the command prompt:
 
     defaults write -g ApplePressAndHoldEnabled -bool false
 
-This can be reversed with the following:
+The change may be reversed later with the following command:
 
     defaults write -g ApplePressAndHoldEnabled -bool true 
 
