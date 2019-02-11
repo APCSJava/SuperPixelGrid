@@ -16,7 +16,7 @@ public class Colorizer {
 	 * @param original a superpixel array that should not be altered
 	 * @return a new array with the properties described
 	 */
-	SuperPixel[][] commandWhite(SuperPixel[][] original) {
+	public SuperPixel[][] commandWhite(SuperPixel[][] original) {
 		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
 		for (int r = 0; r < mod.length; r++) {
 			for (int c = 0; c < mod[r].length; c++) {
@@ -40,13 +40,8 @@ public class Colorizer {
 	 * @return a new array with the properties described
 	 */
 	public SuperPixel[][] commandRed(SuperPixel[][] original) {
-		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
-		for (int r = 0; r < mod.length; r++) {
-			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = new SuperPixel(Color.RED);
-			}
-		}
-		return mod;
+		// TODO implement this method
+		return null;
 	}
 
 	/**
@@ -58,7 +53,7 @@ public class Colorizer {
 	 * @param original a superpixel array that should not be altered
 	 * @return a new array with the properties described
 	 */
-	SuperPixel[][] commandGreen(SuperPixel[][] original) {
+	public SuperPixel[][] commandGreen(SuperPixel[][] original) {
 		// TODO implement this method
 		return null;
 	}
@@ -73,7 +68,7 @@ public class Colorizer {
 	 * @param original a superpixel array that should not be altered
 	 * @return a new array with the properties described
 	 */
-	SuperPixel[][] commandBlue(SuperPixel[][] original) {
+	public SuperPixel[][] commandBlue(SuperPixel[][] original) {
 		// TODO implement this method
 		return null;
 	}
@@ -84,7 +79,7 @@ public class Colorizer {
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
-	void commandClear(SuperPixel[][] original) {
+	public void commandClear(SuperPixel[][] original) {
 		// TODO implement this method
 	}
 
@@ -95,7 +90,7 @@ public class Colorizer {
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
-	void commandUp(SuperPixel[][] original) {
+	public void commandUp(SuperPixel[][] original) {
 		// TODO implement this method
 	}
 
@@ -105,7 +100,7 @@ public class Colorizer {
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
-	void commandDown(SuperPixel[][] original) {
+	public void commandDown(SuperPixel[][] original) {
 		// TODO implement this method
 	}
 
@@ -116,7 +111,7 @@ public class Colorizer {
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
-	void commandLeft(SuperPixel[][] original) {
+	public void commandLeft(SuperPixel[][] original) {
 		for (int r = 0; r < original.length; r++) {
 			for (int c = 0; c < original[0].length; c++) {
 				if (c == original[0].length - 1) {
@@ -135,7 +130,7 @@ public class Colorizer {
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
-	void commandRight(SuperPixel[][] original) {
+	public void commandRight(SuperPixel[][] original) {
 		// TODO implement this method
 	}
 
@@ -145,7 +140,7 @@ public class Colorizer {
 	 * @param superPixel a single superpixel to mutate
 	 */
 	public static void modifySinglePixel(SuperPixel superPixel) {
-		superPixel.setColor(Color.WHITE);
+		// TODO implement this method
 	}
 
 	/**
