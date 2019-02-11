@@ -59,13 +59,8 @@ public class Colorizer {
 	 * @return a new array with the properties described
 	 */
 	SuperPixel[][] commandGreen(SuperPixel[][] original) {
-		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
-		for (int r = 0; r < mod.length; r++) {
-			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = c % 2 == 0 ? new SuperPixel(Color.GREEN) : original[r][c];
-			}
-		}
-		return mod;
+		// TODO implement this method
+		return null;
 	}
 
 	/**
@@ -79,13 +74,8 @@ public class Colorizer {
 	 * @return a new array with the properties described
 	 */
 	SuperPixel[][] commandBlue(SuperPixel[][] original) {
-		SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
-		for (int r = 0; r < mod.length; r++) {
-			for (int c = 0; c < mod[r].length; c++) {
-				mod[r][c] = r % 3 == 0 ? new SuperPixel(Color.BLUE) : original[r][c];
-			}
-		}
-		return mod;
+		// TODO implement this method
+		return null;
 	}
 
 	/**
@@ -95,11 +85,7 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	void commandClear(SuperPixel[][] original) {
-		for (int r = 0; r < original.length; r++) {
-			for (int c = 0; c < original[r].length; c++) {
-				original[r][c] = new SuperPixel(Color.BLACK);
-			}
-		}
+		// TODO implement this method
 	}
 
 	/**
@@ -110,12 +96,7 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	void commandUp(SuperPixel[][] original) {
-		for (int r = 0; r < original.length - 1; r++) {
-			original[r] = original[r + 1];
-		}
-		for (int c = 0; c < original[0].length; c++) {
-			original[original.length - 1][c] = new SuperPixel(Color.BLACK);
-		}
+		// TODO implement this method
 	}
 
 	/**
@@ -125,11 +106,7 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	void commandDown(SuperPixel[][] original) {
-		SuperPixel[] bottom = original[original.length - 1];
-		for (int row = original.length - 1; row > 0; row--) {
-			original[row] = original[row - 1];
-		}
-		original[0] = bottom;
+		// TODO implement this method
 	}
 
 	/**
@@ -159,19 +136,7 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	void commandRight(SuperPixel[][] original) {
-		SuperPixel[] right = new SuperPixel[original.length];
-		// buffer the rightmost column
-		for (int r = 0; r < original.length; r++) {
-			right[r] = original[r][original[r].length - 1];
-		}
-		for (int r = 0; r < original.length; r++) {
-			for (int c = original[r].length - 1; c > 0; c--) {
-				original[r][c] = original[r][c - 1];
-			}
-		}
-		for (int r = 0; r < original.length; r++) {
-			original[r][0] = right[r];
-		}
+		// TODO implement this method
 	}
 
 	/**
@@ -191,48 +156,8 @@ public class Colorizer {
 	 * @param original a superpixel array to mutate
 	 */
 	public SuperPixel[][] lifeCommand(SuperPixel[][] original) {
-		SuperPixel[][] next = new SuperPixel[original.length][original[0].length];
-		for (int r = 0; r < original.length; r++) {
-			for (int c = 0; c < original[r].length; c++) {
-				SuperPixel sp = original[r][c];
-				int count = countLivingNeighbors(r, c, original);
-				if (sp.getColor().equals(Color.BLACK)) { // dead cell spawns new cell
-					next[r][c] = count == 3 ? new SuperPixel(Color.WHITE) : sp;
-				} else { // living cell dies
-					next[r][c] = count < 2 || count > 3 ? new SuperPixel(Color.BLACK) : sp;
-				}
-			}
-		}
-		return next;
-	}
-
-	private int countLivingNeighbors(int r, int c, SuperPixel[][] grid) {
-		int count = 0;
-		try {
-			if (!grid[r-1][c-1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r-1][c].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r-1][c+1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r][c-1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r][c+1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r+1][c-1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r+1][c].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		try {
-			if (!grid[r+1][c+1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
-		return count;
+		// TODO implement this method
+		return null;
 	}
 
 }
