@@ -111,7 +111,9 @@ public class Colorizer {
 	 */
 	void commandUp(SuperPixel[][] original) {
 		for (int r = 0; r < original.length - 1; r++) {
-			original[r] = original[r + 1];
+			for (int c = 0; c < original[r].length; c++) {
+				original[r][c] = original[r + 1][c];
+			}
 		}
 		for (int c = 0; c < original[0].length; c++) {
 			original[original.length - 1][c] = new SuperPixel(Color.BLACK);
@@ -209,29 +211,45 @@ public class Colorizer {
 	private int countLivingNeighbors(int r, int c, SuperPixel[][] grid) {
 		int count = 0;
 		try {
-			if (!grid[r-1][c-1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r - 1][c - 1].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r-1][c].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r - 1][c].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r-1][c+1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r - 1][c + 1].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r][c-1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r][c - 1].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r][c+1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r][c + 1].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r+1][c-1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r + 1][c - 1].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r+1][c].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r + 1][c].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		try {
-			if (!grid[r+1][c+1].getColor().equals(Color.BLACK)) count++;
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			if (!grid[r + 1][c + 1].getColor().equals(Color.BLACK))
+				count++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 		return count;
 	}
 
