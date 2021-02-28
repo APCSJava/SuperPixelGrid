@@ -22,7 +22,7 @@ public class SuperPixelGrid {
 	private SuperPixel[][] buffer;
 	private SuperPixel[][] previous; // used for undo action
 	private boolean toolTips = false;
-	int[] cellCoords = { -1, -1 }; // row and column from upper left
+	private int[] cellCoords = { -1, -1 }; // row and column from upper left
 
 	public static void main(String args[]) {
 		SuperPixelGrid spg = new SuperPixelGrid();
