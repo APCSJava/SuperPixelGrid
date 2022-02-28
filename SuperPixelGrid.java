@@ -1,148 +1,155 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Field;
-
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /***
  * Runs the main application.
- * 
+ *
  * @author kentcollins
- * @version 2.0 adapted from Processing to stdlib.jar
+ * @version 3.0 adapted from StdLib to Java Swing
  */
-public class SuperPixelGrid {
+public class SuperPixelGrid extends JFrame {
 
-	private final int SCREEN_WIDTH = 512;
-	private final int SCREEN_HEIGHT = 512;
-	private final int CELL_SIZE = 16;
+    private final int SCREEN_WIDTH = 512;
+    private final int SCREEN_HEIGHT = 512;
 
-	private Colorizer c;
-	private SuperPixel[][] pixels;
-	private SuperPixel[][] buffer;
-	private SuperPixel[][] previous; // used for undo action
-	private boolean toolTips = false;
-	private int[] cellCoords = { -1, -1 }; // row and column from upper left
+    public SuperPixelGrid() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.setResizable(false);
+        this.setTitle("SuperPixelGrid 3.0");
 
-	public static void main(String args[]) {
-		SuperPixelGrid spg = new SuperPixelGrid();
-		spg.run();
-	}
+        // center the window on the viewing screen
+        Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((int) screenDim.getWidth() / 2 - SCREEN_WIDTH / 2, (int) screenDim.getHeight() / 2 - SCREEN_HEIGHT / 2);
 
-	public SuperPixelGrid() {
-		pixels = new SuperPixel[SCREEN_WIDTH / CELL_SIZE][SCREEN_HEIGHT / CELL_SIZE];
-		for (int r = 0; r < pixels.length; r++) {
-			for (int c = 0; c < pixels[r].length; c++) {
-				pixels[r][c] = new SuperPixel(Color.BLACK);
-			}
-		}
-		previous = pixels;
-		buffer = pixels;
-		c = new Colorizer();
-	}
+        // create a panel component and add it to the window
+        this.add(new DisplayPanel());
+    }
 
-	public void run() {
-		StdDraw.setXscale(0, SCREEN_WIDTH);
-		StdDraw.setYscale(0, SCREEN_HEIGHT);
-		StdDraw.enableDoubleBuffering();
-		setTitle(); // modifies window title
-		while (true) {
-			checkMouse();
-			checkKeys();
-			draw();
-			StdDraw.pause(100);
-		}
-	}
-	
-	private void setTitle() {
-		try {
-			Field f = StdDraw.class.getDeclaredField("frame");
-			f.setAccessible(true);
-			JFrame jf = (JFrame) f.get(new JFrame());
-			jf.setTitle("SuperPixelGrid 2.0");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public static void main(String args[]) {
+        SuperPixelGrid spg = new SuperPixelGrid();
+        spg.setVisible(true);
+        System.out.println("Window should be open and listening");
+    }
 
-	private void checkKeys() {
-		if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
-			c.commandUp(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
-			c.commandLeft(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
-			c.commandDown(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
-			c.commandRight(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_W)) {
-			buffer = c.commandWhite(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_R)) {
-			buffer = c.commandRed(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_G)) {
-			buffer = c.commandGreen(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_B)) {
-			buffer = c.commandBlue(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_C)) {
-			c.commandClear(pixels);
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_L)) {
-			previous = pixels;
-			buffer = c.lifeCommand(pixels);
-			pixels = buffer;
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_Z)) {
-			if (previous != null) {
-				buffer = pixels;
-				pixels = previous;
-				previous = buffer;
-			}
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
-			if (buffer != null) {
-				previous = pixels;
-				pixels = buffer;
-			}
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
-			StdOut.println(toolTips);
-			toolTips = !toolTips;
-			while (StdDraw.isKeyPressed(KeyEvent.VK_T)) {
-				StdDraw.pause(150);
-			}
-		} else if (StdDraw.isKeyPressed(KeyEvent.VK_Q)) {
-			System.exit(0);
-		}
-	}
+    private class DisplayPanel extends JPanel {
+        private final int CELL_SIZE = 16;
 
-	private void checkMouse() {
-		double mouseX = StdDraw.mouseX();
-		double mouseY = SCREEN_HEIGHT - StdDraw.mouseY();
-		int mouseRow = (int) (mouseY / CELL_SIZE);
-		int mouseCol = (int) (mouseX / CELL_SIZE);
-		cellCoords = new int[] { mouseRow, mouseCol };
-		// deal with mouse presses
-		if (StdDraw.isMousePressed()) {
-			SuperPixel sp = pixels[mouseRow][mouseCol];
-			Colorizer.modifySinglePixel(sp);
-			while (StdDraw.isMousePressed()) {
-				StdDraw.pause(50);
-			}
-		}
-	}
+        private Colorizer c;
+        private SuperPixel[][] pixels;
+        private SuperPixel[][] buffer;
+        private SuperPixel[][] previous; // used for undo action
+        private boolean toolTips = false;
+        private int[] cellCoords = {-1, -1}; // row and column from upper left
+        private double[] lastMouse = {-1, -1}; // lastX, lastY
 
-	private void draw() {
-		StdDraw.clear(java.awt.Color.DARK_GRAY);
-		for (int r = 0; r < pixels.length; r++) {
-			for (int c = 0; c < pixels[r].length; c++) {
-				SuperPixel sp = pixels[r][c];
-				StdDraw.setPenColor(sp.getColor());
-				StdDraw.filledCircle(c * CELL_SIZE + CELL_SIZE / 2, SCREEN_HEIGHT - (r * CELL_SIZE) - CELL_SIZE / 2,
-						sp.getSize());
-			}
-		}
-		if (toolTips) {
-			StdDraw.setPenColor(java.awt.Color.WHITE);
-			int row = cellCoords[0]; // display upper left corner as (0, 0)
-			int col = cellCoords[1];
-			StdDraw.text(StdDraw.mouseX(), StdDraw.mouseY(), "[" + row + "] [" + col + "]");
-		}
-		StdDraw.show();
-	}
+        public DisplayPanel() {
+            this.setBackground(Color.DARK_GRAY);
+            pixels = new SuperPixel[SCREEN_WIDTH / CELL_SIZE][SCREEN_HEIGHT / CELL_SIZE];
+            for (int r = 0; r < pixels.length; r++) {
+                for (int c = 0; c < pixels[r].length; c++) {
+                    pixels[r][c] = new SuperPixel(Color.BLACK);
+                }
+            }
+            previous = pixels;
+            buffer = pixels;
+            c = new Colorizer();
 
+            addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        c.commandUp(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                        c.commandLeft(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                        c.commandDown(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        c.commandRight(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_W) {
+                        buffer = c.commandWhite(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_R) {
+                        buffer = c.commandRed(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_G) {
+                        buffer = c.commandGreen(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_B) {
+                        buffer = c.commandBlue(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_C) {
+                        c.commandClear(pixels);
+                    } else if (e.getKeyCode() == KeyEvent.VK_L) {
+                        previous = pixels;
+                        buffer = c.lifeCommand(pixels);
+                        pixels = buffer;
+                    } else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                        if (previous != null) {
+                            buffer = pixels;
+                            pixels = previous;
+                            previous = buffer;
+                        }
+                    } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                        if (buffer != null) {
+                            previous = pixels;
+                            pixels = buffer;
+                        }
+                    } else if (e.getKeyCode() == KeyEvent.VK_T) {
+                        toolTips = !toolTips;
+                    } else if (e.getKeyCode() == KeyEvent.VK_Q) {
+                        System.exit(0);
+                    }
+                    repaint();
+                }
+            });
+            addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    lastMouse = new double[]{e.getX(), e.getY()};
+                    int mouseRow = e.getY() / CELL_SIZE;
+                    int mouseCol = e.getX() / CELL_SIZE;
+                    cellCoords = new int[]{mouseRow, mouseCol};
+                    repaint();
+                }
+            });
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    SuperPixel sp = pixels[e.getY() / CELL_SIZE][e.getX() / CELL_SIZE];
+                    Colorizer.modifySinglePixel(sp);
+                }
+            });
+            this.setFocusable(true);
+        }
+
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            for (int r = 0; r < pixels.length; r++) {
+                for (int c = 0; c < pixels[r].length; c++) {
+                    SuperPixel sp = pixels[r][c];
+                    g2d.setPaint(sp.getColor());
+                    g2d.fillOval(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                }
+            }
+            if (toolTips) {
+                g2d.setPaint(java.awt.Color.WHITE);
+                int row = cellCoords[0]; // display upper left corner as (0, 0)
+                int col = cellCoords[1];
+                showMessage("[" + row + "] [" + col + "]", g2d);
+            }
+
+        }
+
+        public void showMessage(String s, Graphics2D g2d) {
+            Font font = new Font("SansSerif", Font.PLAIN, 16);
+            Rectangle2D textBox = font.getStringBounds(s, g2d.getFontRenderContext());
+            g2d.setFont(font);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(s, (int) (lastMouse[0] - textBox.getWidth() / 2), (int) lastMouse[1]);
+        }
+
+    }
 }

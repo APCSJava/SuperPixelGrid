@@ -85,7 +85,7 @@ public class Colorizer {
 
 	/**
 	 * Shifts all super pixels up one row. As the bottom row moves up, it is
-	 * replaced with a row of all black pixels (ie. edges do not wrap when scrolling
+	 * replaced with a row of all black pixels (i.e. edges do not wrap when scrolling
 	 * up).
 	 * 
 	 * @param original a superpixel array to mutate
@@ -96,7 +96,7 @@ public class Colorizer {
 
 	/**
 	 * Shifts all super pixels down one row. As the bottom row moves down, its
-	 * pixels reappear at the top (ie. edges wrap when scrolling down).
+	 * pixels reappear at the top (i.e. edges wrap when scrolling down).
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
@@ -107,7 +107,7 @@ public class Colorizer {
 	/**
 	 * Shifts all super pixels left one column. As the leftmost pixels scroll off
 	 * the screen they are replaced with black super pixels in the rightmost column
-	 * (ie. edges do not wrap when scrolling left)
+	 * (i.e. edges do not wrap when scrolling left)
 	 * 
 	 * @param original a superpixel array to mutate
 	 */
@@ -125,7 +125,7 @@ public class Colorizer {
 
 	/**
 	 * Shifts all super pixels right one column. As the rightmost pixels scroll off
-	 * the screen they reappear at the left edge (ie. edges wrap when scrolling
+	 * the screen they reappear at the left edge (i.e. edges wrap when scrolling
 	 * right)
 	 * 
 	 * @param original a superpixel array to mutate
