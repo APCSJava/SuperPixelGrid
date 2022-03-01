@@ -1,9 +1,7 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.*;
 
 /***
  * Runs the main application.
@@ -15,6 +13,7 @@ public class SuperPixelGrid extends JFrame {
 
     private final int SCREEN_WIDTH = 512;
     private final int SCREEN_HEIGHT = 512;
+    private final int CELL_SIZE = 16;
 
     public SuperPixelGrid() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,8 +36,6 @@ public class SuperPixelGrid extends JFrame {
     }
 
     private class DisplayPanel extends JPanel {
-        private final int CELL_SIZE = 16;
-
         private Colorizer c;
         private SuperPixel[][] pixels;
         private SuperPixel[][] buffer;
