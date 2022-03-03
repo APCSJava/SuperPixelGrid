@@ -67,5 +67,12 @@ public class SuperPixel {
 	public void setSize(float size) {
 		this.size = size;
 	}
+	
+	/**
+ 	*  A string holding the red, green and blue components of the current color
+   	*/
+   	public String toString() {
+      		return "("+color.getRed()+","+color.getGreen()+","+color.getBlue()+")";
+   	}
 
 }
