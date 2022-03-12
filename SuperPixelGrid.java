@@ -17,7 +17,6 @@ public class SuperPixelGrid extends JFrame {
 
     public SuperPixelGrid() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         this.setResizable(false);
         this.setTitle("SuperPixelGrid 3.0");
 
@@ -27,6 +26,7 @@ public class SuperPixelGrid extends JFrame {
 
         // create a panel component and add it to the window
         this.add(new DisplayPanel());
+        this.pack();
     }
 
     public static void main(String args[]) {
@@ -46,6 +46,7 @@ public class SuperPixelGrid extends JFrame {
 
         public DisplayPanel() {
             this.setBackground(Color.DARK_GRAY);
+            this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
             pixels = new SuperPixel[SCREEN_WIDTH / CELL_SIZE][SCREEN_HEIGHT / CELL_SIZE];
             for (int r = 0; r < pixels.length; r++) {
                 for (int c = 0; c < pixels[r].length; c++) {
