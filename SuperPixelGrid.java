@@ -7,27 +7,9 @@ import java.awt.geom.Rectangle2D;
  * Runs the main application.
  *
  * @author kentcollins
- * @version 3.0 adapted from StdLib to Java Swing
+ * @version 3.1 adapted from StdLib to Java Swing
  */
 public class SuperPixelGrid extends JFrame {
-
-    private final int SCREEN_WIDTH = 512;
-    private final int SCREEN_HEIGHT = 512;
-    private final int CELL_SIZE = 16;
-
-    public SuperPixelGrid() {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setTitle("SuperPixelGrid 3.0");
-
-        // center the window on the viewing screen
-        Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((int) screenDim.getWidth() / 2 - SCREEN_WIDTH / 2, (int) screenDim.getHeight() / 2 - SCREEN_HEIGHT / 2);
-
-        // create a panel component and add it to the window
-        this.add(new DisplayPanel());
-        this.pack();
-    }
 
     public static void main(String args[]) {
         SuperPixelGrid spg = new SuperPixelGrid();
@@ -35,8 +17,26 @@ public class SuperPixelGrid extends JFrame {
         System.out.println("Window should be open and listening");
     }
 
+    private final int CANVAS_WIDTH = 512;
+    private final int CANVAS_HEIGHT = 512;
+    private final int CELL_SIZE = 16;
+
+    public SuperPixelGrid() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setTitle("SuperPixelGrid 3.1");
+
+        // center the window on the viewing screen
+        Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((int) screenDim.getWidth() / 2 - CANVAS_WIDTH / 2, (int) screenDim.getHeight() / 2 - CANVAS_HEIGHT / 2);
+
+        // create a panel component and add it to the window
+        this.add(new DisplayPanel());
+        this.pack();
+    }
+
     private class DisplayPanel extends JPanel {
-        private Colorizer c;
+        private CommandHandler c;
         private SuperPixel[][] pixels;
         private SuperPixel[][] buffer;
         private SuperPixel[][] previous; // used for undo action
@@ -46,8 +46,8 @@ public class SuperPixelGrid extends JFrame {
 
         public DisplayPanel() {
             this.setBackground(Color.DARK_GRAY);
-            this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-            pixels = new SuperPixel[SCREEN_WIDTH / CELL_SIZE][SCREEN_HEIGHT / CELL_SIZE];
+            this.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+            pixels = new SuperPixel[CANVAS_WIDTH / CELL_SIZE][CANVAS_HEIGHT / CELL_SIZE];
             for (int r = 0; r < pixels.length; r++) {
                 for (int c = 0; c < pixels[r].length; c++) {
                     pixels[r][c] = new SuperPixel(Color.BLACK);
@@ -55,7 +55,7 @@ public class SuperPixelGrid extends JFrame {
             }
             previous = pixels;
             buffer = pixels;
-            c = new Colorizer();
+            c = new CommandHandler();
 
             addKeyListener(new KeyAdapter() {
                 @Override
@@ -116,7 +116,7 @@ public class SuperPixelGrid extends JFrame {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     SuperPixel sp = pixels[e.getY() / CELL_SIZE][e.getX() / CELL_SIZE];
-                    Colorizer.modifySinglePixel(sp);
+                    CommandHandler.clickSuperPixel(sp);
                 }
             });
             this.setFocusable(true);
