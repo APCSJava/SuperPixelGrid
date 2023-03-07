@@ -20,17 +20,17 @@ public class CommandHandler {
      * @return a new array possessing the properties described
      */
     public SuperPixel[][] commandWhite(SuperPixel[][] original) {
-        SuperPixel[][] mod = new SuperPixel[original.length][original[0].length];
-        for (int r = 0; r < mod.length; r++) {
-            for (int c = 0; c < mod[r].length; c++) {
+        SuperPixel[][] temp = new SuperPixel[original.length][original[0].length];
+        for (int r = 0; r < temp.length; r++) {
+            for (int c = 0; c < temp[r].length; c++) {
                 if (Math.random() > 0.5) {
-                    mod[r][c] = new SuperPixel(Color.WHITE);
+                    temp[r][c] = new SuperPixel(Color.WHITE);
                 } else {
-                    mod[r][c] = new SuperPixel(original[r][c].getColor());
+                    temp[r][c] = new SuperPixel(original[r][c].getColor());
                 }
             }
         }
-        return mod;
+        return temp;
     }
 
     /**
