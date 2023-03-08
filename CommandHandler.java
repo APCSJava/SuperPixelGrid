@@ -173,7 +173,7 @@ public class CommandHandler {
 		// TODO replace the code below with your own implementation
 		String message = "CommandHandler method lifeCommand not implemented.";
 		JOptionPane.showMessageDialog(null, message);
-		return null;
+		return original; // you will likely return a new, modified array
 	}
 
 }
